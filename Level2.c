@@ -7,7 +7,7 @@ int	main(int ac, char **av)
 		while (*s)
 		{
 			char	c = *s;
-
+//距离 'z' 多远，就从 'a' 往后走同样的距离
 			if (c >= 'a' && c <= 'z')
 				c = 'a' + ('z' - c);
 			else if (c >= 'A' && c <= 'Z')
@@ -22,7 +22,8 @@ int	main(int ac, char **av)
 
 //camel_to_snake
 int	main(int ac, char **av)
-{
+{//char *s 用来“走字符串”（地址/位置）。
+//char c 用来“装当前字符并修改”（值/数据）
 	if (ac == 2)
 	{
 		char	*s = av[1];
@@ -92,12 +93,12 @@ int	ft_atoi(const char *str)
 
 	result = 0;
 	sign = 1;
-	while (*str == " " || (*str >= 9 && *str <= 13))
+	while (*str == ' ' || (*str >= 9 && *str <= 13))
 		str++;
 	if (*str == '-' || *str == '+')
 	{
 		if (*str == '-')
-			sign == -1;
+			sign = -1;
 		str++;
 	}
 	while (*str >= '0' && *str <= '9')
@@ -120,7 +121,7 @@ int	ft_strcmp(char *s1, char *s2)
 }
 /*int	ft_strcmp(char *s1, char *s2)
 {
-	while (*s1 && (*s1 = *s2))
+	while (*s1 && (*s1 == *s2))
 	{
 		s1++;
 		s2++;
@@ -130,24 +131,30 @@ int	ft_strcmp(char *s1, char *s2)
 
 //ft_strcspn
 #include <stdio.h>
-
+//string complement span
+//计算字符串开头那一段不含指定字符集合（reject）的最长长度
+//返回 s 开头那段“完全不包含 reject 任意字符”的最长前缀的长度。
+//也可以理解为：第一个命中 reject 的位置索引；如果不命中，则返回 s 的长度
 size_t	ft_strcspn(const char *s, const char *reject)
 {
 	size_t	i;
 	size_t	j;
 
 	i = 0;
-	while(s[i++])
+	while (s[i])
 	{
 		j = 0;
 		while (reject[j])
 		{
-			if (s[i] == reject[j++])
-				return (i);
+			if (s[i] == reject[j])
+				return (i);          // 返回第一次匹配到的下标
+			j++;
 		}
+		i++;
 	}
-	return (i);
+	return (i);                       // 没有任何命中，返回 strlen(s)
 }
+
 
 size_t	ft_strcspn(const char *s, const char *reject)
 {
@@ -185,6 +192,7 @@ size_t	ft_strcspn(const char *s, const char *reject)
 }
 
 //ft_strspn
+//strspn = string span，计算开头那一段只包含指定集合的长度
 size_t	ft_strspn(const char *s, const char *accept)
 {
 	int	i;
@@ -225,6 +233,41 @@ size_t	ft_strspn(const char *s, const char *accept)
 	return (i);
 }
 
+#include <stddef.h>
+
+/*
+** ft_strspn
+** 返回字符串 s 从开头起、只由 accept 中字符组成的最长前缀长度。
+** 若 s 的第 i 位不在 accept 中，则返回 i；若整串都在，则返回 strlen(s)。
+*/
+size_t	ft_strspn(const char *s, const char *accept)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i])
+	{
+		size_t	j;
+
+		j = 0;
+		/* 在 accept 里找是否存在 s[i]；找到就提前 break，找不到就会停在 '\0' */
+		while (accept[j])
+		{
+			if (accept[j] == s[i])
+				break;
+			j++;
+		}
+		/* 如果停在 '\0'，说明没找到匹配，s[i] 不属于 accept，返回当前长度 i */
+		if (accept[j] == '\0')
+			return (i);
+		/* 否则说明 s[i] 合法，继续检查下一位 */
+		i++;
+	}
+	/* 扫完整个 s 都合法，返回总长度 i */
+	return (i);
+}
+
+
 //*ft_strdup
 static size_t	ft_strlen(const char *s)
 {
@@ -258,7 +301,7 @@ char	*ft_strdup(char *src)
 #include <stddef.h>
 char	ft_strpbrk(const char *s1, const char *s2)
 {
-	size_t	i;
+	size_t	i = 0;
 	size_t	j;
 
 	if (!s1 || !s2)
@@ -416,7 +459,7 @@ int	main(int ac, char **av)
 		while (i > 0 && (s[i - 1] == ' ' || s[i - 1] == '\t'))
 			i--;
 		end = i;
-		while (i > 0 && (s[i - 1] != ' ' || s[i - 1] != '\t'))
+		while (i > 0 && (s[i - 1] != ' ' && s[i - 1] != '\t'))
 			i--;
 		while (i < end)
 		{
