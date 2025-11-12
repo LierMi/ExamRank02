@@ -416,6 +416,61 @@ unsigned int	ft_gcd(unsigned int a, unsigned int b)
 	return (a);
 }
 
+unsigned int	ft_gcd(unsigned int a, unsigned int b)
+{
+	unsigned int lower;
+	unsigned int cur;
+
+	if(a<b)
+	{
+		lower = a;
+	}
+	else
+	{
+		lower = b;
+	}
+	cur = lower;
+	while (cur > 1)
+	{
+		if (a % lower == 0 && b % lower == 0)
+			return (lower);
+		cur = cur - lower;
+	}
+	return (lower);
+}
+
+int	main(int ac, char **av)
+{
+	if (ac != 3)
+	{
+		write(1, "\n", 1);
+		return (0);
+	}
+	char *str1 = av[1];
+	char *str2 = av[2];
+
+	int i = 0;
+	int j = 0;
+	while(str1[i])
+	{
+		while(str2[j] && str2[j] != str1[i])//)
+		{
+			j++;
+		}
+		i++;
+		if(!str2[j])
+		{
+			write(1, "0", 1);
+			write(1, "\n", 1);
+			return (0);
+		}
+		j++;
+	}
+	write(1, "1", 1);
+	write(1, "\n", 1);
+	return (0);
+}
+
 int	main(int ac, char **av)
 {
 	if (ac != 3)
@@ -446,7 +501,7 @@ unsigned int	ft_atoi(char *str)
 	return (res);
 }
 
-void	put_hex(unsigned int n)
+void	put_hex0(unsigned int n)
 {
 	char	*digits = "0123456789abcdef";
 	char	c;

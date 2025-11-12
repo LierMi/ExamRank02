@@ -125,3 +125,40 @@ void	flood_fill(char **tab, t_point size, t_point begin)
 	char	target = tab[begin.y][begin.x];
 	fill(tab, size, target, begin.y, begin.x);
 }
+
+typedef struct      s_list
+{
+    struct s_list   *next;
+    void            *data;
+}                   t_list;
+
+t_list *sort_list(t_list* lst, int (*cmp)(int,int))
+{
+	t_list*	cur1;
+	t_list*	last;
+	int		tmp;
+	int		swapped;
+
+	if (!lst || !cmp || !lst->next)
+		return lst;
+	last = NULL;
+	swapped = 1;
+	while(lst != last && swapped)
+	{
+		cur1 = lst;
+		swapped = 0;
+		while(cur1->next != last)
+		{
+			if((*cmp)(cur1->data,cur1->next->data) == 0)
+			{
+				tmp = cur1->data;
+				cur1->data = cur1->next->data;
+				cur1->next->data = tmp;
+				swapped = 1;
+			}
+			cur1 = cur1->next;
+		}
+		last = cur1;
+	}
+	return lst;
+}

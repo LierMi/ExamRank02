@@ -658,3 +658,55 @@ int	main(int ac, char **av)
 	write(1, "\n", 1);
 	return (0);
 }
+
+
+unsigned char	reverse_bits(unsigned char octet)
+{
+	unsigned int	i;
+	unsigned int	j;
+	unsigned char	res;
+	unsigned int	bit_value;
+
+	i = 0;
+	res = 0;
+	while (i < 8)
+	{
+		j = 8 - i - 1;
+		bit_value = (octet & (1 << j)) != 0;
+		if (bit_value)
+			res = res | (1 << i);
+		i++;
+	}
+	return (res);
+}
+
+
+unsigned char swap_bits(unsigned char octet)
+{
+	unsigned char	res;
+	unsigned int	i;
+	i = 0;
+	res = 0;
+	while (i < 4)
+	{
+		if ((octet & (1 << i)) != 0)
+			res = res | (1 << (i + 4));
+		i++;
+	}
+	while (i < 8)
+	{
+		if ((octet & (1 << i)) != 0)
+			res = res | (1 << (i - 4));
+		i++;
+	}
+    return res;
+}
+
+void test()
+{
+	unsigned char	res = 0;
+	res = res | 0; // DOES NOTHING
+	res = res & (~0); // DOES NOTHING
+ 	res = res | (1 << 2);
+	res = res & (~(1 << 4));
+}
